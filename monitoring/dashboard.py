@@ -391,50 +391,96 @@ with tabs[3]:
     judged = filtered[filtered["judge_relevance"].notna()]
     if not judged.empty:
         c1, c2 = st.columns([1, 1])
+
         with c1:
             st.markdown("**Relevance Distribution**")
             labels = ["RELEVANT", "PARTLY_RELEVANT", "NON_RELEVANT"]
             counts = {l: int((judged["judge_relevance"] == l).sum()) for l in labels}
+
             fig = go.Figure(
-                data=[go.Pie(
-                    labels=list(counts.keys()),
-                    values=list(counts.values()),
-                    hole=0.5,
-                    marker=dict(colors=[COLORS["success"], COLORS["warning"], COLORS["danger"]]),
-                    textinfo="label+percent",
-                )]
+                data=[
+                    go.Pie(
+                        labels=list(counts.keys()),
+                        values=list(counts.values()),
+                        hole=0.6,
+                        marker=dict(
+                            colors=[COLORS["success"], COLORS["warning"], COLORS["danger"]]
+                        ),
+                        textinfo="percent",
+                        textposition="inside",
+                        hovertemplate="%{label}: %{value} queries (%{percent})",
+                    )
+                ]
             )
-            fig.update_layout(showlegend=False)
-            st.plotly_chart(_fig(fig, height=280), use_container_width=True)
+            fig.add_annotation(
+                text=f"<b>{len(judged)}</b><br><span style='font-size:10px;color:#636E72'>Evaluated</span>",
+                x=0.5, y=0.5, showarrow=False, font=dict(size=14)
+            )
+            fig.update_layout(
+                showlegend=True,
+                legend=dict(orientation="h", y=-0.15, x=0.1),
+                margin=dict(t=10, b=30, l=10, r=10)
+            )
+            st.plotly_chart(_fig(fig, height=260), use_container_width=True, config={"displayModeBar": False})
+
         with c2:
-            st.markdown("**Relevance Trend**")
-            rel_trend = judged.set_index("_ts").resample("D")["judge_relevance"].apply(
-                lambda x: (x == "RELEVANT").mean() * 100
-            ).reset_index(name="rate")
+            st.markdown("**Relevance Rate Trend (%)**")
+            rel_trend = (
+                judged.set_index("_ts")
+                .resample(rule)["judge_relevance"]
+                .apply(lambda x: (x == "RELEVANT").mean() * 100 if len(x) > 0 else None)
+                .reset_index(name="rate")
+            )
             fig = go.Figure(
                 data=go.Scatter(
                     x=rel_trend["_ts"].astype(str),
                     y=rel_trend["rate"],
                     mode="lines+markers",
-                    line=dict(color=COLORS["success"], width=2),
+                    line=dict(color=COLORS["success"], width=2.5, shape="spline"),
+                    fill="tozeroy",
+                    fillcolor="rgba(0, 184, 148, 0.08)",
+                    hovertemplate="%{x}<br>Relevance: %{y:.1f}%",
                 )
             )
-            fig.update_layout(xaxis_title=None, yaxis_title="Relevant (%)", yaxis_range=[0, 100])
-            st.plotly_chart(_fig(fig), use_container_width=True)
+            fig.update_layout(
+                xaxis_title=None,
+                yaxis=dict(
+                    title="Relevant (%)",
+                    range=[0, 105],
+                    gridcolor="#F0F0F0",
+                    showgrid=True,
+                ),
+            )
+            st.plotly_chart(_fig(fig, height=260), use_container_width=True, config={"displayModeBar": False})
 
         st.markdown("---")
         st.markdown("**Latest Judge Verdicts**")
+
         for _, r in judged.sort_values("_ts", ascending=False).head(5).iterrows():
-            color_map = {"RELEVANT": COLORS["success"], "PARTLY_RELEVANT": COLORS["warning"], "NON_RELEVANT": COLORS["danger"]}
+            color_map = {
+                "RELEVANT": COLORS["success"],
+                "PARTLY_RELEVANT": COLORS["warning"],
+                "NON_RELEVANT": COLORS["danger"],
+            }
             color = color_map.get(r["judge_relevance"], COLORS["gray"])
+            ts_str = r["_ts"].strftime("%b %d, %H:%M")
+            model_name = r.get("model", "N/A")
+
             st.markdown(
                 f"""
-                <div style="background:white;border-radius:8px;padding:12px;margin-bottom:8px;border-left:3px solid {color};box-shadow:0 1px 2px rgba(0,0,0,0.05)">
-                    <div style="display:flex;justify-content:space-between;align-items:center">
-                        <strong>{r['question'][:120]}{'…' if len(r['question']) > 120 else ''}</strong>
-                        <span style="background:{color};color:white;padding:2px 8px;border-radius:4px;font-size:11px;white-space:nowrap">{r['judge_relevance']}</span>
+                <div style="background:white;border-radius:8px;padding:14px;margin-bottom:10px;border-left:4px solid {color};box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+                        <div style="font-weight:600;color:#2D3436;font-size:14px">{r['question']}</div>
+                        <span style="background:{color};color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap">{r['judge_relevance']}</span>
                     </div>
-                    <div style="font-size:12px;color:#636E72;margin-top:4px">{r.get('judge_explanation', '')[:200]}</div>
+                    <div style="font-size:12.5px;color:#4A5568;margin-top:6px;line-height:1.4">
+                        {r.get('judge_explanation', 'No explanation provided.')}
+                    </div>
+                    <div style="display:flex;gap:16px;font-size:11px;color:#A0AEC0;margin-top:8px">
+                        <span>🕒 {ts_str}</span>
+                        <span>🤖 {model_name}</span>
+                        <span>⚡ {r.get('latency_ms', 0):.0f} ms</span>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
