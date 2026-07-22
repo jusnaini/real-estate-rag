@@ -208,6 +208,7 @@ docker compose up --build
 | --------------------------- | -------------------------------------------------- | --------------------------------------------- |
 | `make chat`               | `uv run streamlit run app/app.py`                | Launch the chat UI at localhost:8501          |
 | `make dashboard`          | `uv run streamlit run monitoring/dashboard.py`   | Launch monitoring dashboard at localhost:8501 |
+| `make demo`               | `uv run streamlit run app/app_dashboard.py`      | Combined chat + dashboard (sidebar nav)       |
 | `make ingest`             | `uv run python -m ingest.ingest`                 | Run the full ingestion pipeline               |
 | `make evaluate-retrieval` | `uv run python -m evaluation.evaluate_retrieval` | Compare retriever performance (HR@K, MRR)     |
 | `make evaluate-answers`   | `uv run python -m evaluation.evaluate_answers`   | Score answer quality via LLM-as-a-Judge       |
