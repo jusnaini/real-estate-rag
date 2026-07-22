@@ -1,42 +1,55 @@
 # Final Configuration
 
-Selected based on retrieval evaluation (48 ground-truth pairs) and generation evaluation (LLM-as-a-Judge on 5 pairs × 3 configs).
+Selected based on retrieval evaluation (48 ground-truth pairs, 489 chunks) and generation evaluation (LLM-as-a-Judge on 5 pairs × 3 configs).
 
 ---
 
-## 1. Retriever: Hybrid
+## 1. Backend: ONNX Runtime
+
+Replaced `sentence-transformers` (torch) with ONNX Runtime via `Xenova/all-MiniLM-L6-v2`. Embeddings are identical to the torch version (cosine similarity = 1.000 across all 489 chunks). Docker image reduced from ~2.5 GB to ~400 MB.
+
+---
+
+## 2. Retriever: Hybrid + Rerank
+
+The retriever (keyword/vector/hybrid) fetches candidate chunks, then the cross-encoder reranker re-scores and reorders them. Reranking is a post-retrieval step, not a replacement for the retriever.
 
 | Retriever | HR@1 | HR@3 | HR@5 | MRR | Found |
 |-----------|------|------|------|-----|-------|
-| keyword | 0.3125 | 0.4792 | 0.5625 | 0.7309 | 27/48 |
-| vector | 0.5625 | 0.7917 | 0.8125 | 0.8171 | 39/48 |
-| **hybrid** | **0.5833** | **0.7500** | **0.8542** | **0.8069** | **41/48** |
-| reranked | 0.5833 | 0.7500 | 0.8542 | 0.8069 | 41/48 |
-| hybrid+rewrite | 0.6042 | 0.7500 | 0.8750 | 0.8056 | 42/48 |
+| keyword | 0.3125 | 0.3958 | 0.4583 | 0.7795 | 22/48 |
+| vector | 0.4167 | 0.6458 | 0.8125 | 0.6842 | 39/48 |
+| hybrid | 0.4583 | 0.6667 | 0.7708 | 0.7428 | 37/48 |
+| **reranked** | **0.6042** | **0.6667** | **0.7708** | **0.8509** | **37/48** |
+| hybrid+rewrite | 0.4583 | 0.6667 | 0.7708 | 0.7428 | 37/48 |
 
-**Decision:** Hybrid (alpha=0.5). Reranked adds latency with no gain. Query rewrite enabled for marginal HR improvement.
+**Decision:** Hybrid retrieval with cross-encoder reranking. Reranking lifts HR@1 from 0.4583 → 0.6042 (+32%). Query rewrite adds no benefit with current LLM.
 
 ---
 
-## 2. Top-K: 3
+## 3. Top-K: 5
 
 | K | Overall | Faithfulness | Relevance | Completeness | Citation |
 |---|---------|-------------|-----------|-------------|----------|
-| **3** | **7.45** | 6.8 | 9.4 | 7.6 | 6.0 |
-| 5 | 6.30 | 5.8 | 8.4 | 7.2 | 3.8 |
+| 3 | 7.0 | 5.4 | 9.4 | 7.6 | **5.6** |
+| **5** | **7.15** | **6.6** | **9.4** | **8.4** | 4.2 |
 
-K=5 introduces noisier chunks, reducing faithfulness and citation quality.
+K=5 selected for best overall score (7.15), faithfulness (6.6), and completeness (8.4).
 
 ---
 
-## 3. Prompt Template: Default
+## 4. Prompt Template: Default
+
+Defined in `rag/prompts.py` (`SYSTEM_PROMPTS` dict).
+
+- **default** — detailed instructions: answer using only context, cite source titles, say if insufficient, no legal advice
+- **concise** — shortened version: answer concisely, cite source, say if insufficient
 
 | Template | Overall | Faithfulness | Relevance | Completeness | Citation |
 |----------|---------|-------------|-----------|-------------|----------|
-| **default** | **7.45** | 6.8 | 9.4 | 7.6 | 6.0 |
-| concise | 6.35 | 5.0 | 8.8 | 6.4 | 5.2 |
+| **default** | **7.0** | 5.4 | **9.4** | 7.6 | **5.6** |
+| concise | **7.0** | **6.4** | 9.2 | 7.6 | 4.8 |
 
-Detailed system prompt produces more faithful and complete answers.
+Both templates score the same overall. Default is preferred for higher relevance and citation quality.
 
 ---
 
@@ -44,12 +57,12 @@ Detailed system prompt produces more faithful and complete answers.
 
 ```
 RETRIEVER_TYPE=hybrid
-TOP_K=3
+TOP_K=5
 LLM_PROVIDER=groq
 LLM_MODEL=openai/gpt-oss-120b
-EMBEDDING_MODEL=all-MiniLM-L6-v2
+EMBEDDING_BACKEND=onnx
 CHUNK_SIZE=512
 CHUNK_OVERLAP=50
 ```
 
-Query rewriting is enabled in the pipeline (activated by default in `ask()` via the config).
+Reranking is enabled in the pipeline (activated by default in `ask()` via the config).

@@ -15,7 +15,7 @@ import numpy as np
 from openai import OpenAI
 
 import config
-from rag.build_index import load_documents, build_minsearch_index, build_vector_index
+from rag.build_index import load_documents, build_minsearch_index, build_vector_index, get_embedder, get_cross_encoder
 from rag.prompts import rewrite_query
 from rag.search import search_keyword, search_vector, search_hybrid, rerank
 
@@ -63,7 +63,7 @@ def evaluate_retriever(
     retriever_name: str,
     kw_index,
     embeddings,
-    vec_model,
+    embedder,
     docs,
     gt_pairs: list[dict],
     article_map: dict,
@@ -77,13 +77,15 @@ def evaluate_retriever(
         if retriever_name == "keyword":
             results = search_keyword(kw_index, query, k=max(K_VALUES))
         elif retriever_name == "vector":
-            results = search_vector(embeddings, vec_model, docs, query, k=max(K_VALUES))
+            results = search_vector(embeddings, embedder, docs, query, k=max(K_VALUES))
         elif retriever_name == "hybrid":
-            results = search_hybrid(kw_index, embeddings, vec_model, docs, query, k=max(K_VALUES))
+            results = search_hybrid(kw_index, embeddings, embedder, docs, query, k=max(K_VALUES))
         elif retriever_name == "reranked":
             try:
-                results = search_hybrid(kw_index, embeddings, vec_model, docs, query, k=max(K_VALUES))
-                results = rerank(query, results)
+                results = search_hybrid(kw_index, embeddings, embedder, docs, query, k=max(K_VALUES))
+                cross_encoder = get_cross_encoder()
+                if cross_encoder is not None:
+                    results = rerank(query, results, cross_encoder)
             except Exception as e:
                 print(f"    [WARN] Rerank model unavailable: {e}", flush=True)
                 results = []
@@ -110,7 +112,8 @@ def main():
     print("Loading documents and building indexes...", flush=True)
     docs = load_documents()
     kw_index = build_minsearch_index(docs)
-    embeddings, vec_model = build_vector_index(docs)
+    embeddings = build_vector_index(docs)
+    embedder = get_embedder()
     article_map = build_article_map(docs)
     print(f"  {len(docs)} chunks, {len(article_map)} articles", flush=True)
 
@@ -119,7 +122,7 @@ def main():
 
     all_results = []
     for ret in RETRIEVERS:
-        r = evaluate_retriever(ret, kw_index, embeddings, vec_model, docs, gt_pairs, article_map)
+        r = evaluate_retriever(ret, kw_index, embeddings, embedder, docs, gt_pairs, article_map)
         all_results.append(r)
 
     # --- Query rewriting evaluation ---
@@ -142,7 +145,7 @@ def main():
         except Exception:
             rewritten = item["question"]
 
-        results = search_hybrid(kw_index, embeddings, vec_model, docs, rewritten, k=max(K_VALUES))
+        results = search_hybrid(kw_index, embeddings, embedder, docs, rewritten, k=max(K_VALUES))
         rank = None
         for pos, r in enumerate(results, 1):
             if is_relevant(r["id"], item, article_map):
