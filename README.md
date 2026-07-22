@@ -140,6 +140,8 @@ Two additional sources specified in [SDD](docs/SDD.md) were configured but faile
 
 ## Demo
 
+Try the live app: [real-estate-rag.streamlit.app](https://real-estate-rag-upwjpanz6uzmrvczpkjm4p.streamlit.app/)
+
 ![Chat Interface](image/README/1784696078806.png)
 
 ![Monitoring Dashboard](image/README/1784696294082.png)
