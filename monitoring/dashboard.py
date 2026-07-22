@@ -300,55 +300,91 @@ with tabs[1]:
 
 # ---------- TAB 3: Models ----------
 with tabs[2]:
-    model_counts = Counter(filtered[filtered["model"].notna()]["model"])
-    if model_counts:
+    if not filtered.empty and filtered["model"].notna().any():
+        model_stats = (
+            filtered.groupby("model")
+            .agg(
+                query_count=("model", "count"),
+                total_cost=("cost", "sum"),
+                avg_latency=("latency_ms", "mean"),
+                avg_tokens=("total_tokens", "mean"),
+            )
+            .reset_index()
+            .sort_values(by="query_count", ascending=True)
+        )
+
+        dynamic_height = max(240, len(model_stats) * 32)
+
         c1, c2 = st.columns(2)
+
         with c1:
-            st.markdown("**Model Usage (Bar)**")
-            models_sorted = sorted(model_counts)
+            st.markdown("**Query Count by Model**")
             fig = go.Figure(
                 data=go.Bar(
-                    x=[model_counts[m] for m in models_sorted],
-                    y=models_sorted,
+                    x=model_stats["query_count"],
+                    y=model_stats["model"],
                     orientation="h",
+                    text=model_stats["query_count"],
+                    textposition="outside",
                     marker_color=COLORS["primary"],
-                    marker_line_width=0,
+                    marker=dict(cornerradius=4),
                 )
             )
-            fig.update_layout(xaxis_title="Queries", yaxis_title=None)
-            st.plotly_chart(_fig(fig), use_container_width=True)
-        with c2:
-            st.markdown("**Model Usage (Pie)**")
-            fig = go.Figure(
-                data=[go.Pie(
-                    labels=models_sorted,
-                    values=[model_counts[m] for m in models_sorted],
-                    hole=0.5,
-                    textinfo="label+percent",
-                )]
+            fig.update_layout(
+                xaxis=dict(title="Queries", showgrid=True, gridcolor="#F0F0F0"),
+                yaxis=dict(title=None),
             )
-            fig.update_layout(showlegend=False)
-            st.plotly_chart(_fig(fig, height=250), use_container_width=True)
+            st.plotly_chart(_fig(fig, height=dynamic_height), use_container_width=True, config={"displayModeBar": False})
+
+        with c2:
+            st.markdown("**Total Cost by Model ($)**")
+            cost_stats = model_stats.sort_values(by="total_cost", ascending=True)
+            fig = go.Figure(
+                data=go.Bar(
+                    x=cost_stats["total_cost"],
+                    y=cost_stats["model"],
+                    orientation="h",
+                    text=[f"${c:.4f}" for c in cost_stats["total_cost"]],
+                    textposition="outside",
+                    marker_color=COLORS["danger"],
+                    marker=dict(cornerradius=4),
+                )
+            )
+            fig.update_layout(
+                xaxis=dict(title="Total Cost ($)", tickprefix="$", showgrid=True, gridcolor="#F0F0F0"),
+                yaxis=dict(title=None),
+            )
+            st.plotly_chart(_fig(fig, height=dynamic_height), use_container_width=True, config={"displayModeBar": False})
+
+        st.markdown("---")
+        st.markdown("**Model Efficiency Summary**")
+
+        summary_df = model_stats.sort_values(by="query_count", ascending=False).copy()
+        summary_df["avg_cost_per_query"] = summary_df["total_cost"] / summary_df["query_count"]
+        summary_df["avg_latency_s"] = summary_df["avg_latency"] / 1000
+
+        st.dataframe(
+            summary_df[[
+                "model", "query_count", "total_cost", "avg_cost_per_query", "avg_latency_s", "avg_tokens"
+            ]].rename(columns={
+                "model": "Model Name",
+                "query_count": "Queries",
+                "total_cost": "Total Cost ($)",
+                "avg_cost_per_query": "Avg Cost / Query ($)",
+                "avg_latency_s": "Avg Latency (s)",
+                "avg_tokens": "Avg Tokens",
+            }),
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "Total Cost ($)": st.column_config.NumberColumn(format="$%.4f"),
+                "Avg Cost / Query ($)": st.column_config.NumberColumn(format="$%.6f"),
+                "Avg Latency (s)": st.column_config.NumberColumn(format="%.2f s"),
+                "Avg Tokens": st.column_config.NumberColumn(format="%.0f"),
+            }
+        )
     else:
         st.caption("No model data yet.")
-
-    c3, _ = st.columns(2)
-    with c3:
-        st.markdown("**Cost by Model**")
-        cost_by_model = filtered[filtered["cost"].notna()].groupby("model")["cost"].sum().reset_index()
-        if not cost_by_model.empty:
-            fig = go.Figure(
-                data=go.Bar(
-                    x=cost_by_model["model"],
-                    y=cost_by_model["cost"],
-                    marker_color=COLORS["danger"],
-                    marker_line_width=0,
-                )
-            )
-            fig.update_layout(xaxis_title=None, yaxis_title="Total Cost ($)")
-            st.plotly_chart(_fig(fig), use_container_width=True)
-        else:
-            st.caption("No cost data yet.")
 
 # ---------- TAB 4: Judge ----------
 with tabs[3]:
