@@ -199,13 +199,23 @@ with tabs[1]:
 
     with c1:
         st.markdown("**Latency Distribution**")
-        lats = filtered[filtered["latency_ms"].notna()]["latency_ms"]
-        if not lats.empty:
+        lat_df = filtered[filtered["latency_ms"].notna()].copy()
+        if not lat_df.empty:
+            lat_df["latency_s"] = lat_df["latency_ms"] / 1000
             fig = px.histogram(
-                lats, nbins=20, labels={"value": "Latency (ms)"}, color_discrete_sequence=[COLORS["primary"]]
+                lat_df,
+                x="latency_s",
+                nbins=25,
+                labels={"latency_s": "Latency (s)"},
+                color_discrete_sequence=[COLORS["primary"]],
             )
-            fig.update_layout(bargap=0.05)
-            st.plotly_chart(_fig(fig), use_container_width=True)
+            fig.update_traces(hovertemplate="Latency Range: %{x}s<br>Count: %{y}")
+            fig.update_layout(
+                bargap=0.08,
+                xaxis=dict(title="Latency (seconds)", gridcolor="#F0F0F0"),
+                yaxis=dict(title="Count", showgrid=True, gridcolor="#F0F0F0"),
+            )
+            st.plotly_chart(_fig(fig), use_container_width=True, config={"displayModeBar": False})
         else:
             st.caption("No latency data yet.")
 
@@ -213,17 +223,24 @@ with tabs[1]:
         st.markdown("**Latency Trend**")
         lat_trend = filtered[filtered["latency_ms"].notna()].copy()
         if not lat_trend.empty:
-            lat_trend = lat_trend.set_index("_ts").resample("D")["latency_ms"].mean().reset_index()
+            lat_trend = lat_trend.set_index("_ts").resample(rule)["latency_ms"].mean().reset_index()
+            lat_trend["latency_s"] = lat_trend["latency_ms"] / 1000
             fig = go.Figure(
                 data=go.Scatter(
                     x=lat_trend["_ts"].astype(str),
-                    y=lat_trend["latency_ms"],
+                    y=lat_trend["latency_s"],
                     mode="lines+markers",
-                    line=dict(color=COLORS["secondary"], width=2),
+                    line=dict(color=COLORS["secondary"], width=2.5, shape="spline"),
+                    fill="tozeroy",
+                    fillcolor="rgba(108, 92, 231, 0.08)",
+                    hovertemplate="%{x}<br>Avg Latency: %{y:.2f} s",
                 )
             )
-            fig.update_layout(xaxis_title=None, yaxis_title="Avg Latency (ms)")
-            st.plotly_chart(_fig(fig), use_container_width=True)
+            fig.update_layout(
+                xaxis_title=None,
+                yaxis=dict(title="Avg Latency (s)", showgrid=True, gridcolor="#F0F0F0"),
+            )
+            st.plotly_chart(_fig(fig), use_container_width=True, config={"displayModeBar": False})
         else:
             st.caption("No latency data yet.")
 
@@ -234,10 +251,18 @@ with tabs[1]:
         costs = filtered[filtered["cost"].notna()]["cost"]
         if not costs.empty:
             fig = px.histogram(
-                costs, nbins=15, labels={"value": "Cost ($)"}, color_discrete_sequence=[COLORS["success"]]
+                costs,
+                nbins=15,
+                labels={"value": "Cost ($)"},
+                color_discrete_sequence=[COLORS["success"]],
             )
-            fig.update_layout(bargap=0.05)
-            st.plotly_chart(_fig(fig), use_container_width=True)
+            fig.update_traces(hovertemplate="Cost Range: $%{x}<br>Count: %{y}")
+            fig.update_layout(
+                bargap=0.08,
+                xaxis=dict(title="Cost ($)", tickprefix="$", gridcolor="#F0F0F0"),
+                yaxis=dict(title="Count", showgrid=True, gridcolor="#F0F0F0"),
+            )
+            st.plotly_chart(_fig(fig), use_container_width=True, config={"displayModeBar": False})
         else:
             st.caption("No cost data yet.")
 
@@ -253,18 +278,23 @@ with tabs[1]:
                     pass
         if source_counter:
             top = dict(source_counter.most_common(10))
+            chart_height = max(220, len(top) * 28)
             fig = go.Figure(
                 data=go.Bar(
                     x=list(top.values()),
                     y=list(top.keys()),
                     orientation="h",
+                    text=list(top.values()),
+                    textposition="outside",
                     marker_color=COLORS["primary"],
-                    marker_line_width=0,
+                    marker=dict(cornerradius=4),
                 )
             )
-            fig.update_layout(xaxis_title="Citations", yaxis_title=None)
-            fig.update_yaxes(categoryorder="total ascending")
-            st.plotly_chart(_fig(fig, height=280), use_container_width=True)
+            fig.update_layout(
+                xaxis=dict(title="Citations", showgrid=True, gridcolor="#F0F0F0"),
+                yaxis=dict(autorange="reversed"),
+            )
+            st.plotly_chart(_fig(fig, height=chart_height), use_container_width=True, config={"displayModeBar": False})
         else:
             st.caption("No source data yet.")
 
