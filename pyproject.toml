@@ -1,0 +1,32 @@
+[project]
+name = "real-estate-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "gitsource>=0.0.5",
+    "huggingface-hub>=0.23,<0.24",
+    "importlib-metadata>=9.0.0",
+    "lxml>=6.1.1",
+    "minsearch>=0.1.1",
+    "numpy>=2.5.0",
+    "onnxruntime>=1.27.0",
+    "openai>=2.45.0",
+    "plotly>=6.9.0",
+    "psycopg[binary]>=3.3.4",
+    "pydantic-ai>=0.8.1",
+    "python-dotenv>=1.2.2",
+    "requests>=2.34.2",
+    "sentence-transformers>=0.2.5.1",
+    "sqlitesearch>=0.1.1",
+    "streamlit>=1.59.2",
+    "tokenizers<0.21",
+    "tqdm>=4.68.3",
+    "transformers>=4.38.0,<4.46.0",
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "retriever": "keyword",
+    "total": 48,
+    "found": 27,
+    "hit_rate@1": 0.3125,
+    "hit_rate@3": 0.4792,
+    "hit_rate@5": 0.5625,
+    "mrr": 0.7309
+  },
+  {
+    "retriever": "vector",
+    "total": 48,
+    "found": 39,
+    "hit_rate@1": 0.5625,
+    "hit_rate@3": 0.7917,
+    "hit_rate@5": 0.8125,
+    "mrr": 0.8171
+  },
+  {
+    "retriever": "hybrid",
+    "total": 48,
+    "found": 41,
+    "hit_rate@1": 0.5833,
+    "hit_rate@3": 0.75,
+    "hit_rate@5": 0.8542,
+    "mrr": 0.8069
+  },
+  {
+    "retriever": "reranked",
+    "total": 48,
+    "found": 41,
+    "hit_rate@1": 0.5833,
+    "hit_rate@3": 0.75,
+    "hit_rate@5": 0.8542,
+    "mrr": 0.8069
+  },
+  {
+    "retriever": "hybrid+rewrite",
+    "total": 48,
+    "found": 42,
+    "hit_rate@1": 0.6042,
+    "hit_rate@3": 0.75,
+    "hit_rate@5": 0.875,
+    "mrr": 0.8056
+  }
+]

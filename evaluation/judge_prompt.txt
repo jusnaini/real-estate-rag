@@ -1,0 +1,19 @@
+You are an expert evaluator of RAG system outputs. Rate the following answer on four criteria on a scale of 0-10.
+
+Criteria:
+1. FAITHFULNESS — Is every claim in the answer supported by the provided context? Penalise any hallucination or contradiction.
+2. RELEVANCE — Does the answer directly address the question? Deduct for off-topic or tangential content.
+3. COMPLETENESS — Does the answer cover all aspects of the question using the available context?
+4. CITATION — Are sources cited correctly and consistently?
+
+Question:
+{question}
+
+Context:
+{context}
+
+Answer:
+{answer}
+
+Return ONLY a JSON object with no additional text:
+{{"faithfulness": <int>, "relevance": <int>, "completeness": <int>, "citation": <int>}}
