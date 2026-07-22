@@ -1,7 +1,7 @@
 [
   {
     "question": "How much stamp duty for a RM500k property?",
-    "answer": "I\u2019m sorry, but the provided context does not include the specific stamp\u2011duty rates or a calculation for a RM500,000 property.\u202f\u3010Source 1\u3011, \u3010Source 2\u3011, \u3010Source 3\u3011, \u3010Source 4\u3011, \u3010Source 5\u3011.",
+    "answer": "Sorry, I encountered an error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kjc64z2qfjm9kpmg8kvpdy2g` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199644, Requested 632. Please try again in 1m59.232s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "sources": [
       {
         "id": "7bc86587-b76a-4895-8a58-0aaaa9a87929",
@@ -32,22 +32,22 @@
         "score": 0.2556
       },
       {
-        "id": "e70e356b-4b1c-4f5e-b5d0-055a8d3a087f",
+        "id": "5e1aed3c-25ff-4473-9f6f-bf0e411b2507",
         "title": "Property Stamp Duty in Malaysia: How to Calculate",
         "source": "iproperty",
         "url": "https://www.iproperty.com.my/guides/stamp-duty-spa-legal-fees-owning-a-house-malaysia-24760",
         "score": 0.25
       }
     ],
-    "latency_ms": 961,
-    "prompt_tokens": 316,
-    "completion_tokens": 199,
-    "total_tokens": 515,
-    "cost": 0.0001668
+    "latency_ms": 259,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost": 0.0
   },
   {
     "question": "What is the difference between MRTA and MLTA?",
-    "answer": "**MRTA (Mortgage Reducing Term Assurance)**  \n- The sum\u2011insured falls as you repay the mortgage, so the coverage amount gets smaller over time.  \n- Because the coverage declines, the premiums are generally lower than for MLTA.  \n- It is a \u201cone\u2011to\u2011one\u201d policy \u2013 the payout can only be used to settle the loan on the same property and cannot be transferred to another home loan.  \n- If the outstanding loan exceeds the original sum\u2011insured, any shortfall must be paid by your family.  \n\n**MLTA (Mortgage Level Term Assurance)**  \n- The sum\u2011insured remains the same for the whole policy term, giving level coverage regardless of how much of the loan you have repaid.  \n- Premiums are higher than MRTA because the coverage does not decrease.  \n- The policy is transferable to another home loan under your name.  \n- If the payout exceeds the outstanding loan, the excess is paid to your beneficiaries rather than the bank.  \n\nThese points are drawn from the RinggitPlus articles on \u201cBest Housing Loans in Malaysia 2026\u201d and the \u201cHome Loan Eligibility Calculator 2026\u201d source.  \n\n*Sources: \u201cHome Loan Eligibility Calculator 2026 (calculatormalaysia)\u201d; \u201cBest Housing Loans in Malaysia 2026 (ringgitplus)\u201d*",
+    "answer": "Sorry, I encountered an error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kjc64z2qfjm9kpmg8kvpdy2g` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199643, Requested 1431. Please try again in 7m43.967999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "sources": [
       {
         "id": "0fedbf15-b7fe-48f9-9363-111b9874e429",
@@ -78,22 +78,22 @@
         "score": 0.2515
       },
       {
-        "id": "172958bc-0273-4760-bac3-91b48bea0634",
-        "title": "Property Insurance Malaysia: Fire, MRTA & Homeowner Coverage Compared",
-        "source": "propcashflow",
-        "url": "https://propcashflow.my/blog/property-insurance-fire-insurance-malaysia/",
+        "id": "a20453ef-1196-4198-82f1-9c64a7bba55b",
+        "title": "The Process of Buying a House in Malaysia 2026",
+        "source": "iproperty",
+        "url": "https://www.iproperty.com.my/guides/documents-and-paperwork-buying-a-house-in-malaysia-71908",
         "score": 0.25
       }
     ],
-    "latency_ms": 1189,
-    "prompt_tokens": 863,
-    "completion_tokens": 358,
-    "total_tokens": 1221,
-    "cost": 0.00034425
+    "latency_ms": 227,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost": 0.0
   },
   {
     "question": "What documents do I need to apply for a home loan?",
-    "answer": "To apply for a home loan in Malaysia you\u2019ll typically need to provide the following documents to the bank:\n\n- **Proof of income** (e.g., salary slips, tax filings)  \n- **EPF statements**  \n- **Payslips**  \n- **CCRIS (Credit Counselling and Debt Review) record**  \n- **Employment letter** from your employer  \n- **Identification documents** (e.g., NRIC or passport)\n\nThese are the common documents banks request to assess your eligibility and debt service ratio (DSR).\u3010Source 2\u3011",
+    "answer": "Sorry, I encountered an error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kjc64z2qfjm9kpmg8kvpdy2g` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199642, Requested 700. Please try again in 2m27.744s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "sources": [
       {
         "id": "95ff7335-25d2-4727-9bea-14e532bbe97d",
@@ -124,22 +124,22 @@
         "score": 0.3383
       },
       {
-        "id": "985cad92-a429-4044-a359-673129d90483",
-        "title": "Home Loan Eligibility Calculator 2026",
-        "source": "calculatormalaysia",
-        "url": "https://calculatormalaysia.com/loan/home-loan-eligibility-calculator-malaysia/",
+        "id": "39930e41-94ab-49f4-ae44-d973b3923ab7",
+        "title": "Complete Guide For First Time Home Buyer",
+        "source": "stashaway",
+        "url": "https://www.stashaway.my/r/complete-guide-first-time-home-buyer-buying-house-in-malaysia",
         "score": 0.25
       }
     ],
-    "latency_ms": 1538,
-    "prompt_tokens": 431,
-    "completion_tokens": 303,
-    "total_tokens": 734,
-    "cost": 0.00024645
+    "latency_ms": 301,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost": 0.0
   },
   {
     "question": "How does DSR affect my loan eligibility?",
-    "answer": "Debt Service Ratio (DSR) is the percentage of your net monthly income that goes toward servicing all of your existing debt\u202f+\u202fthe new loan you are applying for.  \n\n* **Approval decision** \u2013 Banks first look at your DSR to see whether you can comfortably afford another repayment. If your DSR stays below the bank\u2019s internal ceiling (most banks use a 60\u202f%\u201370\u202f% limit, with some allowing up to 80\u202f% for high\u2011income earners), the loan is more likely to be approved. If the DSR rises above that threshold after adding the proposed home\u2011loan instalment, the application will be rejected, even if you have a good credit score or employment history\u3010Source 2\u3011.  \n\n* **Loan amount** \u2013 A lower DSR means you have more \u201croom\u201d in your income, so banks can lend you a larger amount. A higher DSR reduces the amount you can borrow because the bank wants to keep the total debt load within its acceptable range\u3010Source 1\u3011.  \n\n* **Interest rate** \u2013 Because a low DSR signals a safer borrower, banks are also more inclined to offer better (lower) interest rates. A high DSR can lead to higher rates or less favourable terms\u3010Source 1\u3011.  \n\nIn short, your DSR directly influences whether you get approved, how much you can borrow, and the cost of the loan. Keeping the ratio below the bank\u2019s threshold is essential for loan eligibility.  \n\n*Sources: \u201cDSR Calculator (ringgitplus)\u201d, \u201cDSR Calculation Malaysia: Home Loan Eligibility (propcashflow)\u201d.*",
+    "answer": "Sorry, I encountered an error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kjc64z2qfjm9kpmg8kvpdy2g` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199642, Requested 1045. Please try again in 4m56.784s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "sources": [
       {
         "id": "fb0e843e-4a32-4584-9aad-bea8ad952029",
@@ -163,29 +163,29 @@
         "score": 0.2587
       },
       {
-        "id": "b78c683f-0b6d-41e1-9d09-217d5fe2fb95",
+        "id": "37a51c9d-879b-43cd-8ef8-7844e5610a74",
         "title": "DSR Calculation Malaysia: Home Loan Eligibility",
         "source": "propcashflow",
         "url": "https://propcashflow.my/blog/home-loan-eligibility-dsr-malaysia/",
         "score": 0.25
       },
       {
-        "id": "0d1b15d2-d77c-4ff5-9012-8e4109aba4f7",
+        "id": "865934ca-9b59-4c27-a3dc-81852bea1539",
         "title": "DSR Calculation Malaysia: Home Loan Eligibility",
         "source": "propcashflow",
         "url": "https://propcashflow.my/blog/home-loan-eligibility-dsr-malaysia/",
         "score": 0.25
       }
     ],
-    "latency_ms": 1728,
-    "prompt_tokens": 1047,
-    "completion_tokens": 477,
-    "total_tokens": 1524,
-    "cost": 0.00044325
+    "latency_ms": 248,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost": 0.0
   },
   {
     "question": "What are the steps to buy my first house in Malaysia?",
-    "answer": "Below is a concise, step\u2011by\u2011step outline of the typical journey for a first\u2011time homebuyer in Malaysia, based on the 2026 guides:\n\n1. **Assess your readiness** \u2013 Review your finances (savings, income, existing debts) and decide whether you can afford a purchase and the associated costs.  \n2. **Secure financing** \u2013 Get a mortgage pre\u2011approval or loan quotation from a bank, and understand the loan\u2011to\u2011value (LTV) limits and required down\u2011payment.  \n3. **Define your needs & budget** \u2013 Choose the type of property, location, and price range that fit your lifestyle and financial capacity.  \n4. **Search for properties** \u2013 Use online portals, agents, or developers to shortlist suitable homes.  \n5. **Engage a real\u2011estate agent (optional but common)** \u2013 An agent can arrange viewings, negotiate price, and guide you through the paperwork.  \n6. **Make an offer & negotiate** \u2013 Once you find a property you like, submit an offer and agree on the final purchase price.  \n7. **Sign the Sale & Purchase Agreement (SPA)** \u2013 Both buyer and seller sign the SPA and you typically pay an initial deposit (usually 2\u20113\u202f% of the price).  \n8. **Apply for the home loan** \u2013 Submit the formal loan application, provide required documents, and await the bank\u2019s approval.  \n9. **Property valuation & legal checks** \u2013 The bank will conduct a valuation; a lawyer/conveyancer will perform title searches and ensure there are no encumbrances.  \n10. **Pay the balance & stamp duty** \u2013 After loan approval, pay the remaining purchase price (or the portion not covered by the loan) and the required stamp duty.  \n11. **Sign the Memorandum of Transfer (MOT)** \u2013 This legal document transfers ownership from seller to buyer.  \n12. **Register the transfer** \u2013 Your lawyer lodges the MOT and supporting documents with the Land Office to officially record you as the new owner.  \n13. **Collect the keys & take possession** \u2013 Once registration is complete, you receive the keys and can move into your new home.\n\nThese steps turn the home\u2011buying process from a daunting task into a structured, manageable sequence.  \n\n*Sources: \u201cThe Process of Buying a House in Malaysia 2026\u201d (iProperty) and \u201cComplete Guide For First Time Home Buyer to Buying a House in Malaysia\u201d (StashAway).*",
+    "answer": "Sorry, I encountered an error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kjc64z2qfjm9kpmg8kvpdy2g` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199641, Requested 1642. Please try again in 9m14.256s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "sources": [
       {
         "id": "40298170-6d95-425f-a6a7-f453674f3bfe",
@@ -223,15 +223,15 @@
         "score": 0.252
       }
     ],
-    "latency_ms": 1844,
-    "prompt_tokens": 924,
-    "completion_tokens": 635,
-    "total_tokens": 1559,
-    "cost": 0.0005196
+    "latency_ms": 227,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost": 0.0
   },
   {
     "question": "What legal fees should I expect when buying property?",
-    "answer": "When you buy a property in Malaysia you\u2019ll need to set aside money for the solicitor\u2019s services.\u202fLegal fees typically cover:\n\n* **Preparation of the Sale & Purchase Agreement (SPA)** \u2013 the contract that transfers ownership.  \n* **Drafting the loan agreement** \u2013 if you are taking a mortgage, the lender\u2019s loan documents are prepared by the solicitor.  \n* **Other legal documentation** \u2013 any additional paperwork required for the transaction.\n\nIn addition to the basic solicitor\u2019s fee, there are usually **disbursements** such as:\n\n* Search fees (title searches, land office checks)  \n* Registration fees (to register the transfer with the land office)  \n* Courier or postage costs for sending documents  \n\nBecause the exact amount can vary by lawyer and the complexity of the deal, it\u2019s best to ask your solicitor for a full, itemised breakdown before you proceed.  \n\n*Source: \u201cProperty Stamp Duty in Malaysia: How to Calculate\u201d (iproperty)*",
+    "answer": "Sorry, I encountered an error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kjc64z2qfjm9kpmg8kvpdy2g` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199641, Requested 1483. Please try again in 8m5.568s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "sources": [
       {
         "id": "948b0eaf-b925-47e5-9fba-6851cd232949",
@@ -262,22 +262,22 @@
         "score": 0.2751
       },
       {
-        "id": "7bc86587-b76a-4895-8a58-0aaaa9a87929",
-        "title": "Property Stamp Duty in Malaysia: How to Calculate",
-        "source": "iproperty",
-        "url": "https://www.iproperty.com.my/guides/stamp-duty-spa-legal-fees-owning-a-house-malaysia-24760",
+        "id": "4c36f3fa-eb96-4974-8161-343f6c1c065b",
+        "title": "Complete Guide to Purchasing Property in Malaysia",
+        "source": "iqi_global",
+        "url": "https://iqiglobal.com/blog/complete-guide-to-purchasing-property-in-malaysia/",
         "score": 0.25
       }
     ],
-    "latency_ms": 1766,
-    "prompt_tokens": 894,
-    "completion_tokens": 368,
-    "total_tokens": 1262,
-    "cost": 0.00035489999999999995
+    "latency_ms": 261,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost": 0.0
   },
   {
     "question": "How much fire insurance do I need for a bank loan?",
-    "answer": "For a bank\u2011financed property the fire policy must cover the **full rebuild cost of the building**, not the market value of the land or the whole property.\u202fThe bank will check that the sum\u2011insured is calculated on a \u201crebuild\u2011cost\u201d basis (the amount needed to reconstruct the structure) and that the policy is assigned to the bank as first\u2011loss payee.\u202fIf the sum insured is lower than the rebuild cost, the \u201caverage clause\u201d can reduce any claim.\n\nWhile the exact amount depends on your specific property (size, construction class, location, etc.), the article gives indicative rebuild\u2011cost values for typical residential units:\n\n| Insured Value (RM) | Approx. Annual Premium (RM) |\n|--------------------|-----------------------------|\n| 200,000            | 100 \u2013 180                   |\n| 300,000            | 150 \u2013 250                   |\n| 400,000            | 180 \u2013 320                   |\n| 500,000            | 200 \u2013 400                   |\n| 800,000            | 300 \u2013 600                   |\n| 1,000,000          | 350 \u2013 700                   |\n\nSo, you should obtain fire insurance for an amount that matches the **rebuild cost** of your property (e.g., RM\u202f500,000 if that is the estimated cost to reconstruct your home). The bank will then name itself as the first\u2011loss payee and may require an assignment or banker\u2019s clause on the policy.  \n\n*Sources: \u201cProperty Insurance Malaysia: Fire, MRTA & Homeowner Coverage Compared\u201d (propcashflow) \u2013 sum\u2011insured basis and indicative ranges; \u201cBank Loan Fire Insurance Malaysia: Requirements\u201d (foundation) \u2013 requirement for rebuild\u2011cost based sum insured.*",
+    "answer": "Sorry, I encountered an error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kjc64z2qfjm9kpmg8kvpdy2g` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199640, Requested 1705. Please try again in 9m41.04s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "sources": [
       {
         "id": "b16a5877-5c49-4c54-8256-685c8797f1ba",
@@ -315,15 +315,15 @@
         "score": 0.3653
       }
     ],
-    "latency_ms": 6921,
-    "prompt_tokens": 987,
-    "completion_tokens": 546,
-    "total_tokens": 1533,
-    "cost": 0.00047565
+    "latency_ms": 301,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost": 0.0
   },
   {
     "question": "What is the SPA process?",
-    "answer": "The SPA (Sales & Purchase Agreement) is the key legal contract you sign when buying a property in Malaysia.  \n\n1. **Signing the SPA** \u2013 You must sign the agreement in the presence of a licensed conveyancing lawyer. The lawyer will protect your interests, explain every clause and make sure the seller fulfills their obligations\u3010Source\u202f1\u3011.  \n\n2. **Reviewing the document** \u2013 Even if the developer provides a free SPA drafting service, it is wise to have your own lawyer review it. Check that the payment schedule, hand\u2011over date, penalties for delays or breaches and any other conditions are clearly stated\u3010Source\u202f5\u3011.  \n\n3. **Paying the remaining down\u2011payment and associated costs** \u2013 Once the SPA is signed, you need to pay the balance of the down\u2011payment together with stamping fees, legal fees and any other required charges\u3010Source\u202f3\u3011.  \n\nIn short, the SPA process involves signing the agreement with legal representation, carefully reviewing its terms, and then settling the remaining down\u2011payment and related fees.  \n\n*Sources: \u201cThe Process of Buying a House in Malaysia 2026 (iproperty)\u201d and \u201cComplete Guide For First Time Home Buyer (stashaway)\u201d.*",
+    "answer": "Sorry, I encountered an error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kjc64z2qfjm9kpmg8kvpdy2g` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199639, Requested 810. Please try again in 3m13.968s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "sources": [
       {
         "id": "2bf96e20-40af-4a00-b363-528aa9f1f686",
@@ -361,10 +361,10 @@
         "score": 0.3162
       }
     ],
-    "latency_ms": 7926,
-    "prompt_tokens": 484,
-    "completion_tokens": 326,
-    "total_tokens": 810,
-    "cost": 0.0002682
+    "latency_ms": 225,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost": 0.0
   }
 ]
