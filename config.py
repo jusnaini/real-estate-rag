@@ -40,6 +40,7 @@ CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "512"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "50"))
 TOP_K = int(os.getenv("TOP_K", "5"))
 RETRIEVER_TYPE = os.getenv("RETRIEVER_TYPE", "hybrid")
+EMBEDDING_BACKEND = os.getenv("EMBEDDING_BACKEND", "torch")
 
 PROVIDER_CONFIGS = {
     "groq": {
