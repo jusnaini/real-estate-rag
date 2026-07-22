@@ -317,8 +317,6 @@ Metrics used:
 
 Final config documented in [`evaluation/results/final_config.md`](evaluation/results/final_config.md).
 
-Final config documented in [`evaluation/results/final_config.md`](evaluation/results/final_config.md).
-
 ---
 
 ## Monitoring
