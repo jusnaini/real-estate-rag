@@ -26,7 +26,6 @@ An **AI assistant** that focuses on assisting users especially the first-time bu
   - [Makefile Targets](#makefile-targets)
   - [Project Structure](#project-structure)
   - [Configuration](#configuration)
-  - [Example Questions](#example-questions)
   - [Retrieval Strategies](#retrieval-strategies)
   - [Evaluation Results](#evaluation-results)
     - [Retrieval Evaluation (48 ground-truth pairs)](#retrieval-evaluation-48-ground-truth-pairs)
@@ -236,17 +235,6 @@ All settings via `.env`:
 | `TOP_K`           | `5`                                    | Number of chunks to retrieve                                            |
 | `CHUNK_SIZE`      | `512`                                  | Tokens per chunk                                                        |
 | `CHUNK_OVERLAP`   | `50`                                   | Overlap between chunks                                                  |
-
----
-
-## Example Questions
-
-- "How much stamp duty for a RM500k property?"
-- "What is the difference between MRTA and MLTA?"
-- "What documents do I need to apply for a home loan?"
-- "How does DSR affect my loan eligibility?"
-- "What are the steps to buy my first house in Malaysia?"
-- "What legal fees should I expect when buying property?"
 
 ---
 
