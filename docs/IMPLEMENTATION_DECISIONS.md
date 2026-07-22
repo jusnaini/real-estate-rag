@@ -78,7 +78,7 @@ Keyword and vector scores live on different scales. When fusing, each score set 
 
 ### Why 3 search results (k=3)
 
-Found empirically that 3 chunks provide enough context for a grounded answer without exceeding the LLM's context window. 5 chunks sometimes introduced noise from less-relevant chunks. K is configurable via `TOP_K` in `.env`.
+K=5 selected for best overall score (7.15), faithfulness (6.6), and completeness (8.4) in LLM-as-a-Judge evaluation. K is configurable via `TOP_K` in `.env`.
 
 ### Lazy index loading
 

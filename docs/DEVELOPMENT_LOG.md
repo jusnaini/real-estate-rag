@@ -121,6 +121,7 @@ Chronological record of what was built, decisions made, and blockers encountered
 | Jul 21 | Notebook 401 errors (env not loaded) | Fixed `load_dotenv` path relative to `config.py` |
 | Jul 22 | `sqlite3.Connection.lastrowid` removed in Python 3.13 | Switched to `Cursor.lastrowid` |
 | Jul 22 | Groq 429 rate limit during testing | Expected on free tier; add retries in production |
+| Jul 22 | Docker image ~2.5 GB from PyTorch/sentence-transformers | Migrated to ONNX Runtime — image reduced to ~400 MB |
 
 ---
 ## 2026-07-22
@@ -166,4 +167,29 @@ Chronological record of what was built, decisions made, and blockers encountered
 
 **T5.4 Cloud deployment:**
 - Instructions added to README for GCP Cloud Run and Azure Container Apps
+
+### Phase 6 — ONNX Migration
+
+**T6.1 ONNX embedder (`rag/embedder.py`):**
+- Replaced `sentence-transformers/all-MiniLM-L6-v2` (torch, 1.8 GB) with ONNX Runtime via `Xenova/all-MiniLM-L6-v2`
+- New class `Embedder` with `encode()` / `encode_batch()` using mean pooling
+- New class `CrossEncoder` with `predict()` for reranking pairs
+- Identical embeddings (cos=1.0 across all 489 chunks) vs torch version
+- Docker image reduced from ~2.5 GB to ~400 MB
+
+**T6.2 Config toggle (`EMBEDDING_BACKEND`):**
+- Added `EMBEDDING_BACKEND=onnx|torch` in `config.py` for revert safety
+- `rag/build_index.py` updated to select embedder class based on config
+
+**T6.3 Slimmed dependencies:**
+- Moved `torch`, `sentence-transformers`, `lxml`, `psycopg` to optional dev group
+- Runtime deps reduced to 9 packages
+- Regenerated `uv.lock` with 70 packages (was >200)
+
+**T6.4 Evaluation re-run:**
+- Re-ran LLM-as-a-Judge generation evaluation with updated ONNX pipeline
+- Results were more balanced — default and concise both scored 7.0 overall
+- K=5 (7.15) outperformed K=3 (7.0) in overall score — switched `TOP_K` to 5
+- Cross-encoder reranking confirmed: HR@1 0.4583 → 0.6042 (+32%)
+- `final_config.md` updated with new numbers and retriever/reranker explanation
 
