@@ -10,7 +10,13 @@ from openai import OpenAI
 
 import config
 from monitoring.logger import calculate_cost
-from rag.build_index import load_documents, build_minsearch_index, build_vector_index
+from rag.build_index import (
+    load_documents,
+    build_minsearch_index,
+    build_vector_index,
+    get_embedder,
+    get_cross_encoder,
+)
 from rag.search import (
     search_keyword,
     search_vector,
@@ -96,7 +102,11 @@ def ask(
     if not hasattr(ask, "_docs"):
         ask._docs = load_documents()
         ask._kw_index = build_minsearch_index(ask._docs)
-        ask._embeddings, ask._vec_model = build_vector_index(ask._docs)
+        ask._embeddings = build_vector_index(ask._docs)
+        ask._embedder = get_embedder()
+        ask._cross_encoder = None
+
+    embedder = ask._embedder
 
     # --- Query rewriting ---
     final_query = question
@@ -118,15 +128,17 @@ def ask(
         results = search_keyword(ask._kw_index, final_query, k=k)
     elif retriever == "vector":
         results = search_vector(
-            ask._embeddings, ask._vec_model, ask._docs, final_query, k=k
+            ask._embeddings, embedder, ask._docs, final_query, k=k
         )
     else:
         results = search_hybrid(
-            ask._kw_index, ask._embeddings, ask._vec_model, ask._docs, final_query, k=k
+            ask._kw_index, ask._embeddings, embedder, ask._docs, final_query, k=k
         )
 
     if rerank_results and results:
-        results = rerank(final_query, results)
+        if ask._cross_encoder is None:
+            ask._cross_encoder = get_cross_encoder()
+        results = rerank(final_query, results, ask._cross_encoder)
 
     # --- Generation ---
     context = _format_context(results)

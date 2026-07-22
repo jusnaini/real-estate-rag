@@ -1,9 +1,11 @@
-"""Index builders for keyword (MinSearch) and vector (sentence-transformers) retrieval.
+"""Index builders for keyword (MinSearch) and vector retrieval.
 
 Exports
 -------
 build_minsearch_index(documents) -> minsearch.Index
-build_vector_index(documents) -> tuple[np.ndarray, SentenceTransformer]
+build_vector_index(documents) -> np.ndarray
+get_embedder() -> object
+get_cross_encoder(model_name) -> object
 load_documents() -> list[dict]
 """
 
@@ -12,9 +14,27 @@ import pickle
 
 import minsearch
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from tqdm import tqdm
 
 import config
+
+
+def get_embedder():
+    if config.EMBEDDING_BACKEND == "onnx":
+        from rag.embedder import Embedder
+        return Embedder()
+    from sentence_transformers import SentenceTransformer
+    return SentenceTransformer(config.EMBEDDING_MODEL)
+
+
+def get_cross_encoder(model_name: str = None):
+    if config.EMBEDDING_BACKEND == "onnx":
+        from rag.embedder import CrossEncoder
+        return CrossEncoder()
+    from sentence_transformers import CrossEncoder
+    if model_name is None:
+        model_name = config.RERANK_MODEL
+    return CrossEncoder(model_name)
 
 
 def load_documents() -> list[dict]:
@@ -50,23 +70,44 @@ def build_minsearch_index(documents: list[dict]) -> minsearch.Index:
     return index
 
 
-def build_vector_index(documents: list[dict]) -> tuple[np.ndarray, SentenceTransformer]:
-    """Compute sentence-transformer embeddings for every document chunk.
+def build_vector_index(documents: list[dict], force: bool = False) -> np.ndarray:
+    """Compute embeddings for every document chunk using the configured backend.
 
     Parameters
     ----------
     documents : list[dict]
         Chunked documents.
+    force : bool
+        If True, recompute even if a cached file exists (default False).
 
     Returns
     -------
-    tuple[np.ndarray, SentenceTransformer]
-        ``(embeddings, model)`` where embeddings has shape ``(N, D)``.
+    np.ndarray
+        Embeddings with shape ``(N, D)``.
     """
-    model = SentenceTransformer(config.EMBEDDING_MODEL)
+    cache_path = config.PROCESSED_DIR / "embeddings.npy"
+    if not force and cache_path.exists():
+        cached = np.load(cache_path)
+        if len(cached) == len(documents):
+            return np.array(cached)
+
     texts = [d["text"] for d in documents]
-    embeddings = model.encode(texts, show_progress_bar=True)
-    return np.array(embeddings), model
+    if config.EMBEDDING_BACKEND == "onnx":
+        from rag.embedder import Embedder
+        embedder = Embedder()
+        embeddings = []
+        for i in tqdm(range(0, len(texts), 32), desc="Embedding"):
+            batch = texts[i:i + 32]
+            embeddings.append(embedder.encode_batch(batch))
+        embeddings = np.vstack(embeddings)
+    else:
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer(config.EMBEDDING_MODEL)
+        embeddings = model.encode(texts, show_progress_bar=True)
+
+    embeddings = np.array(embeddings)
+    np.save(cache_path, embeddings)
+    return embeddings
 
 
 def save_index(index: minsearch.Index, path: str = None):
@@ -107,8 +148,8 @@ if __name__ == "__main__":
     save_index(idx)
     print(f"MinSearch index built and saved ({len(docs)} docs indexed)")
 
-    emb, model = build_vector_index(docs)
+    emb = build_vector_index(docs)
     emb_path = config.PROCESSED_DIR / "embeddings.npy"
     np.save(emb_path, emb)
-    print(f"Vector index built — shape {emb.shape}, model {config.EMBEDDING_MODEL}")
+    print(f"Vector index built — shape {emb.shape}, backend {config.EMBEDDING_BACKEND}")
     print(f"Embeddings saved to {emb_path}")

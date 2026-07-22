@@ -3,14 +3,12 @@
 Exports
 -------
 search_keyword(index, query, k) -> list[dict]
-search_vector(embeddings, model, documents, query, k) -> list[dict]
-search_hybrid(index, embeddings, model, documents, query, k, alpha) -> list[dict]
-rerank(query, results, model_name) -> list[dict]
+search_vector(embeddings, embedder, documents, query, k) -> list[dict]
+search_hybrid(index, embeddings, embedder, documents, query, k, alpha) -> list[dict]
+rerank(query, results, cross_encoder) -> list[dict]
 """
 
 import numpy as np
-from sentence_transformers import SentenceTransformer, CrossEncoder
-from sklearn.metrics.pairwise import cosine_similarity
 
 import config
 
@@ -42,19 +40,19 @@ def search_keyword(index, query: str, k: int = None) -> list[dict]:
 
 def search_vector(
     embeddings: np.ndarray,
-    model: SentenceTransformer,
+    embedder,
     documents: list[dict],
     query: str,
     k: int = None,
 ) -> list[dict]:
-    """Vector (semantic) search via sentence-transformer cosine similarity.
+    """Vector (semantic) search via cosine similarity on embeddings.
 
     Parameters
     ----------
     embeddings : np.ndarray
         Pre-computed document embeddings, shape ``(N, D)``.
-    model : SentenceTransformer
-        The embedding model (used to embed the query).
+    embedder : object
+        Embedding model with ``.encode(texts)`` method.
     documents : list[dict]
         Original document chunks (aligned with embeddings rows).
     query : str
@@ -69,8 +67,8 @@ def search_vector(
     """
     if k is None:
         k = config.TOP_K
-    query_emb = model.encode([query])
-    sims = cosine_similarity(query_emb, embeddings)[0]
+    query_emb = embedder.encode([query])
+    sims = (query_emb @ embeddings.T)[0]
     top_indices = np.argsort(sims)[::-1][:k]
     results = []
     for idx in top_indices:
@@ -83,7 +81,7 @@ def search_vector(
 def search_hybrid(
     index,
     embeddings: np.ndarray,
-    model: SentenceTransformer,
+    embedder,
     documents: list[dict],
     query: str,
     k: int = None,
@@ -97,7 +95,8 @@ def search_hybrid(
     ----------
     index : minsearch.Index
     embeddings : np.ndarray
-    model : SentenceTransformer
+    embedder : object
+        Embedding model with ``.encode(texts)`` method.
     documents : list[dict]
     query : str
     k : int or None
@@ -112,7 +111,7 @@ def search_hybrid(
     if k is None:
         k = config.TOP_K
     kw_results = search_keyword(index, query, k=k * 2)
-    vec_results = search_vector(embeddings, model, documents, query, k=k * 2)
+    vec_results = search_vector(embeddings, embedder, documents, query, k=k * 2)
 
     kw_scores = {r["id"]: r["score"] for r in kw_results}
     vec_scores = {r["id"]: r["score"] for r in vec_results}
@@ -148,7 +147,7 @@ def search_hybrid(
     return fused[:k]
 
 
-def rerank(query: str, results: list[dict], model_name: str = None) -> list[dict]:
+def rerank(query: str, results: list[dict], cross_encoder) -> list[dict]:
     """Re-rank results using a cross-encoder model.
 
     Parameters
@@ -157,17 +156,14 @@ def rerank(query: str, results: list[dict], model_name: str = None) -> list[dict
         Original user query.
     results : list[dict]
         Candidate documents (must have a ``text`` key).
-    model_name : str or None
-        Cross-encoder model name (default from config).
+    cross_encoder : object
+        Cross-encoder instance with ``.predict(pairs)`` method.
 
     Returns
     -------
     list[dict]
         Re-ranked results with updated ``score``.
     """
-    if model_name is None:
-        model_name = config.RERANK_MODEL
-    cross_encoder = CrossEncoder(model_name)
     pairs = [(query, r["text"]) for r in results]
     scores = cross_encoder.predict(pairs)
     for r, s in zip(results, scores):
