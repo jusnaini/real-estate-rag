@@ -286,6 +286,13 @@ The pipeline uses **hybrid retrieval** (keyword + vector fused) followed by **cr
 
 ## Evaluation Results
 
+RAG systems are evaluated at two levels: **retrieval quality** (does it find the right documents?) and **generation quality** (is the answer correct?).
+
+Metrics used:
+- **HR@K (Hit Rate@K)** — how often the relevant document appears in the top K results
+- **MRR (Mean Reciprocal Rank)** — how highly the first relevant result is ranked (1 = first position)
+- **LLM-as-a-Judge** — a separate LLM scores each answer on faithfulness (0-10), relevance (0-10), completeness (0-10), and citation accuracy (0-10)
+
 ### Retrieval Evaluation (48 ground-truth pairs, 489 chunks)
 
 | Retriever          | HR@1             | HR@3             | HR@5             | MRR              | Found           |
@@ -302,11 +309,13 @@ The pipeline uses **hybrid retrieval** (keyword + vector fused) followed by **cr
 
 | Config                      | Overall        | Faithfulness | Relevance | Completeness | Citation |
 | --------------------------- | -------------- | ------------ | --------- | ------------ | -------- |
-| **hybrid_k3_default** | **7.45** | 6.8          | 9.4       | 7.6          | 6.0      |
-| hybrid_k5_default           | 6.30           | 5.8          | 8.4       | 7.2          | 3.8      |
-| hybrid_k3_concise           | 6.35           | 5.0          | 8.8       | 6.4          | 5.2      |
+| **hybrid_k5_default** | **7.15** | **6.6**      | **9.4**   | **8.4**      | 4.2      |
+| hybrid_k3_default           | 7.0            | 5.4          | 9.4       | 7.6          | **5.6**  |
+| hybrid_k3_concise           | 7.0            | 6.4          | 9.2       | 7.6          | 4.8      |
 
-**Winner:** Hybrid retriever with reranking, K=3, default prompt.
+**Winner:** Hybrid retriever with reranking, K=5, default prompt. K=5 scores higher overall (7.15 vs 7.0) and better faithfulness (6.6 vs 5.4) than K=3, though K=3 has slightly better citation (5.6 vs 4.2).
+
+Final config documented in [`evaluation/results/final_config.md`](evaluation/results/final_config.md).
 
 Final config documented in [`evaluation/results/final_config.md`](evaluation/results/final_config.md).
 
